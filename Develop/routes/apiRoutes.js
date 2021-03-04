@@ -1,26 +1,29 @@
 const express = require('express');
-const { db } = require('../models/workout');
+const { db } = require('../models');
 const router = express.Router();
-const Workout = require('../models/workout')
+const Exercise = require('../models/exercise')
 
-//view daily workouts
-router.get('/workouts', async (req, res) => {
-    Workout.find({})
-        .sort({ date: -1 })
-        .then(dbWorkout => {
-            res.json(dbWorkout)
+//view daily Exercises
+router.get('/api/stats', (req, res) => {
+    Exercise.find({})
+        // .sort({ date: -1 })
+        .then(dbExercise => {
+            console.log(dbExercise)
+            res.json(dbExercise)
         })
         .catch(err => {
             res.status(400).json(err)
         });
 })
-//create new workout
-router.post('/workouts', (req, res) => {
-    const newWorkout = new db.Workout(req.body);
-    newWorkout.timeStamp();
+//create new Exercise
+router.post('/api/exercise', (req, res) => {
+    const newExercise = new db.Exercise(req.body);
+    newExercise.timeStamp();
 
-    db.Workout.create(newWorkout).then((dbWorkout) => {
-        res.json(dbWorkout);
+    db.Exercise.create(newExercise).then((dbExercise) => {
+        console.log(dbExercise)
+
+        res.json(dbExercise);
     })
         .catch(err => {
             res.status(400).json(err)
@@ -30,14 +33,20 @@ router.post('/workouts', (req, res) => {
 //sort workouts
 //track name, type, weight, sets, reps and duration of exercise
 // for cardio - distance traveled
-router.get('/', (req, res) => {
+// router.get('/', (req, res) => {
 
-})
+// })
+// router.get('/exercise', (req, res) => {
 
-// continue with today's workout
-router.patch('/:id', (req, res) => {
+// })
+// router.get('/api/exercise', (req, res) => {
 
-})
+// })
+
+// // continue with today's workout
+// router.patch('/exercise:id', (req, res) => {
+
+// })
 
 
 

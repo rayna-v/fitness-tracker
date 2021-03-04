@@ -12,18 +12,15 @@ const app = express();
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static("./public/assets"));
+app.use(express.static("./public"));
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workouts", {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
 
-app.use('/workouts', routes);
+// app.use('/exercise', routes);
 
-
-// require("./routes/htmlRoutes")(app);
-// require("./routes/apiRoutes")(app);
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/index.html"));
 });

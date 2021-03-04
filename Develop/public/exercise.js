@@ -34,13 +34,17 @@ initExercise();
 
 function handleWorkoutTypeChange(event) {
   workoutType = event.target.value;
-
-  if (workoutType === "cardio") {
+  console.log(workoutType)
+  if (workoutType == "cardio") {
     cardioForm.classList.remove("d-none");
     resistanceForm.classList.add("d-none");
-  } else if (workoutType === "resistance") {
+    // completeButton.removeAttribute("disabled");
+    // addButton.removeAttribute("disabled");
+  } else if (workoutType == "resistance") {
     resistanceForm.classList.remove("d-none");
     cardioForm.classList.add("d-none");
+    // completeButton.removeAttribute("disabled");
+    // addButton.removeAttribute("disabled");
   } else {
     cardioForm.classList.add("d-none");
     resistanceForm.classList.add("d-none");
@@ -139,6 +143,7 @@ function clearInputs() {
 
 if (workoutTypeSelect) {
   workoutTypeSelect.addEventListener("change", handleWorkoutTypeChange);
+  console.log(workoutTypeSelect)
 }
 if (completeButton) {
   completeButton.addEventListener("click", function (event) {

@@ -1,21 +1,10 @@
-// require('dotenv').config();
-// const express = require('express');
-// const app = express();
-// const mongoose = require('mongoose');
-
-// mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
-// const db = mongoose.connection;
-// db.on('error', (error) => console.log(error))
-// db.once('open', () => console.log('Connected to DB'))
-
-// app.listen(3000, () => console.log('Server Started'))
 require('dotenv').config();
 
 const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require("morgan");
 const path = require("path");
-const routes = require('./routes/workouts')
+const routes = require('./routes/apiRoutes')
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -30,9 +19,21 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workouts", {
     useUnifiedTopology: true
 });
 
-const db = require("./models");
-
 app.use('/workouts', routes);
+
+
+// require("./routes/htmlRoutes")(app);
+// require("./routes/apiRoutes")(app);
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "./public/index.html"));
+});
+app.get("/exercise", (req, res) => {
+    res.sendFile(path.join(__dirname, "./public/exercise.html"));
+});
+app.get("/stats", (req, res) => {
+    res.sendFile(path.join(__dirname, "./public/stats.html"));
+});
+
 
 app.listen(PORT, () => {
     console.log(`App running on port ${PORT}!`);

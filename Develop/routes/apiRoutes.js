@@ -1,10 +1,10 @@
 const express = require('express');
-const { db } = require('../models');
+// const { db } = require('../models');
 const router = express.Router();
 const Exercise = require('../models/exercise')
 
 //view daily Exercises
-router.get('/api/stats', (req, res) => {
+router.get('/stats', (req, res) => {
     Exercise.find({})
         // .sort({ date: -1 })
         .then(dbExercise => {
@@ -16,11 +16,11 @@ router.get('/api/stats', (req, res) => {
         });
 })
 //create new Exercise
-router.post('/api/exercise', (req, res) => {
-    const newExercise = new db.Exercise(req.body);
-    newExercise.timeStamp();
-
-    db.Exercise.create(newExercise).then((dbExercise) => {
+router.post('/exercise', ({ body }, res) => {
+    let date = new Date();
+    console.log("hello")
+    console.log(body)
+    Exercise.create({ date, body }).then((dbExercise) => {
         console.log(dbExercise)
 
         res.json(dbExercise);
@@ -36,9 +36,17 @@ router.post('/api/exercise', (req, res) => {
 // router.get('/', (req, res) => {
 
 // })
-// router.get('/exercise', (req, res) => {
-
-// })
+router.get('/exercise', (req, res) => {
+    Exercise.find({})
+        // .sort({ date: -1 })
+        .then(dbExercise => {
+            console.log(dbExercise)
+            res.json(dbExercise)
+        })
+        .catch(err => {
+            res.status(400).json(err)
+        });
+})
 // router.get('/api/exercise', (req, res) => {
 
 // })

@@ -19,7 +19,7 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workouts", {
     useUnifiedTopology: true
 });
 
-// app.use('/exercise', routes);
+app.use('/api', routes);
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/index.html"));

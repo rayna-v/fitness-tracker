@@ -1,60 +1,69 @@
 const express = require('express');
 // const { db } = require('../models');
 const router = express.Router();
-const Exercise = require('../models/exercise')
+const Workout = require('../models/workout')
 
-//view daily Exercises
+//view workout stats
 router.get('/stats', (req, res) => {
-    Exercise.find({})
+    Workout.find({})
         // .sort({ date: -1 })
-        .then(dbExercise => {
-            console.log(dbExercise)
-            res.json(dbExercise)
+        .then(dbWorkout => {
+            res.json(dbWorkout)
         })
         .catch(err => {
             res.status(400).json(err)
         });
 })
-//create new Exercise
-router.post('/exercise', ({ body }, res) => {
-    let date = new Date();
-    console.log("hello")
-    console.log(body)
-    Exercise.create({ date, body }).then((dbExercise) => {
-        console.log(dbExercise)
 
-        res.json(dbExercise);
-    })
+//add to Workout
+router.put('/exercise/:id', ({ body, params }, res) => {
+    Workout.updateOne({ _id: params.id }, { $push: { "exercises": body } })
+        .then((dbWorkout) => {
+            res.json(dbWorkout);
+        })
         .catch(err => {
             res.status(400).json(err)
         });
 })
 
-//sort workouts
-//track name, type, weight, sets, reps and duration of exercise
-// for cardio - distance traveled
-// router.get('/', (req, res) => {
-
-// })
+// get workout data
 router.get('/exercise', (req, res) => {
-    Exercise.find({})
+    Workout.aggregate([{
+        $addFields: {
+            totalDuration: { $sum: "$exercises.duration" }
+        }
+    }])
         // .sort({ date: -1 })
-        .then(dbExercise => {
-            console.log(dbExercise)
-            res.json(dbExercise)
+        .then(dbWorkout => {
+            // console.log(dbWorkout)
+            res.json(dbWorkout)
         })
         .catch(err => {
             res.status(400).json(err)
         });
 })
-// router.get('/api/exercise', (req, res) => {
+// create new workout
+router.post('/exercise', ({ body }, res) => {
+    let day = new Date();
+    Workout.create({ day, body })
+        .then(dbWorkout => {
+            res.json(dbWorkout);
+        })
+        .catch(err => {
+            res.status(400).json(err)
+        });
+})
 
-// })
-
-// // continue with today's workout
-// router.patch('/exercise:id', (req, res) => {
-
-// })
+router.get('/exercise/range', (req, res) => {
+    Workout.find({})
+        .limit(7)
+        .then(dbWorkout => {
+            res.json(dbWorkout);
+        })
+        .catch(err => {
+            res.status(400).json(err)
+        });
+})
 
 
 
